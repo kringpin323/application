@@ -20,7 +20,7 @@
 
 		function weibo_page($key,$limit,$offset)
 		{
-				$que = "SELECT weibo.id, weibo.content
+				$que = "SELECT weibo.id, weibo.content,weibo.createdate
 					FROM weibo
 					WHERE weibo.content LIKE  '%$key%'
 					limit $offset,$limit";

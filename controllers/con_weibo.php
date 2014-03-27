@@ -141,7 +141,7 @@ class Con_weibo extends CI_Controller
 	                    'table_close'         => '</table>'
 		    				);
 		    $this->table->set_template($tmpl);
-			$this->table->set_heading('序号', '例句');
+			$this->table->set_heading('序号', '例句','时间');
 
 			$num=($page-1)*$DropDownListPsize+1;
 			$data['num_begin'] = $num;
@@ -151,7 +151,8 @@ class Con_weibo extends CI_Controller
 	            	$newstr=str_replace($array['weibo_key'],'<font color=red>'.$array['weibo_key'].'</font>', $row['content']);//加红标注字体
 	                $this->table->add_row(
 	                $num,
-	                anchor(site_url().'/con_comment/show_comment/'.$row['id'].'/'.$data['DropDownListPsize'].'/'.$out_pattern.'/'.$praise.'/'.$unable.'/'.$criticize, stripslashes($newstr))
+	                anchor(site_url().'/con_comment/show_comment/'.$row['id'].'/'.$data['DropDownListPsize'].'/'.$out_pattern.'/'.$praise.'/'.$unable.'/'.$criticize, stripslashes($newstr)),
+	                $row['createdate']
 	                //$this->typography->auto_typography($row->item)
 	                );
 	                $num++;

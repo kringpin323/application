@@ -2,6 +2,8 @@
 
 
 /*
+// 请注意:  0 是无法确定，1是褒义 ，2是贬义
+
 *四个点还没有做完：
 1. 话题搜索没支持多关键字搜索（重要但搁置）
 2. 褒贬显示是无法选择的(于2014/2/28完成)
@@ -10,6 +12,9 @@
 5. con_topic 的分页功能 (于2014-2-25完成)
 6. 用session 将 查询模式，输出模式，褒贬显示重写
 7. 学习js，用js写弹出作品人
+8. 显示微博时间（客户需求）(2014/3/27 完成)
+9. 显示褒贬义数目（客户需求）（基本完成，只是褒贬义分得不太准确，而且要在search_comment中要定为到原微博不容易，未处理）
+10. 点击重新回到上下文处（客户需求）
 *日期：2013-12-24
 *作者：林景培
 *
@@ -164,7 +169,7 @@ class Con_topic extends CI_Controller
 		    $this->table->set_template($tmpl);
 
 		    //设置table 题头
-			$this->table->set_heading('序号', '例句');
+			$this->table->set_heading('序号', '例句','时间');
 
 			//显示本页要输出的条目，从 多少到多少 之类
 			$num=($page-1)*$DropDownListPsize+1;
@@ -177,7 +182,8 @@ class Con_topic extends CI_Controller
 	            	//row是每个条目
 	                $this->table->add_row(
 	                $num, //题目标号
-	                anchor(site_url().'/con_comment/show_comment/'.$row['id'].'/'.$data['DropDownListPsize'].'/RadioButton3', $row['content'])
+	                anchor(site_url().'/con_comment/show_comment/'.$row['id'].'/'.$data['DropDownListPsize'].'/RadioButton3', $row['content']),
+	                $row['createdate']
 	                // site_url().'/con_comment/show_comment/'.$row['id'].'/'.$data['DropDownListPsize']
 	                // 该段代表 生成链接 site_url() 的 con_comment 的 show_comment函数，参数列表：weiboid，每页数目，跳转过去默认第一页
 	                );

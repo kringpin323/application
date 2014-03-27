@@ -25,7 +25,7 @@
 				/*foreach ($rowkey as $row) {
 					echo " row ".$row;
 				}*/
-				$que = "SELECT weibo.id, weibo.content
+				$que = "SELECT weibo.id, weibo.content,weibo.createdate
 						FROM weibo, topicandkey
 						WHERE weibo.topicid = topicandkey.topicid
 						AND topicandkey.key in ('$key')

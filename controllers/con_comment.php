@@ -220,7 +220,7 @@ class Con_comment extends CI_Controller
 	                    'table_close'         => '</table>'
 		    				);
 		    $this->table->set_template($tmpl);
-			$this->table->set_heading('序号', '例句','作品人');
+			$this->table->set_heading('序号', '例句' );
 
 			$num=($page-1)*$DropDownListPsize+1;
 			$data['num_begin'] = $num;
@@ -315,7 +315,28 @@ class Con_comment extends CI_Controller
 
 			$form = $out_pattern;
 			$data['results'] = $this->mod_comment->weibo_comment($weiboid,$form,$praise,$unable,$criticize,$limit,$offset);
-			
+			$data['baobian'] = $this->mod_comment->baobian($weiboid);
+
+			$data['baoyi'] = "0";
+			$data['bianyi'] = "0";
+			$data['wufapanduan'] = "0";
+// 请注意:  0 是无法确定，1是褒义 ，2是贬义
+			while($row = $data['baobian']->_fetch_assoc())
+	            {
+	            	 if($row['Judgment'] =='0')
+	            	 {
+	            	 	$data['wufapanduan'] = $row['coun'];
+	            	 }
+	            	 else if($row['Judgment'] =='1')
+	            	 {
+	            	 	$data['baoyi'] = $row['coun'];
+	            	 }
+	            	 else
+	            	 {
+	            	 	$data['bianyi'] = $row['coun'];
+	            	 }
+	         	}
+
 			// load the HTML Table Class
 		    $this->load->library('table');
 		    
@@ -341,7 +362,7 @@ class Con_comment extends CI_Controller
 		    $this->table->set_template($tmpl);
 			
 		    // load the view
-			$this->table->set_heading('序号', '例句','作品人');
+			$this->table->set_heading('序号', '例句' );
 
 			$num=($page-1)*$DropDownListPsize+1;
 			$data['num_begin'] = $num;
@@ -369,7 +390,10 @@ class Con_comment extends CI_Controller
 	                );
 	                $num++;
 	         	}
-			
+			// $data['baoyi'] = $data['baobian']['1'];
+			// $data['bianyi'] = $data['baobian']['2'];
+			// $data['wufapanduan'] = $data['baobian']['0'];
+	 
 
 	        $data['base']=$this->config->item('base_url');
 			$data['css']=$this->config->item('css');

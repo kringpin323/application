@@ -1,5 +1,6 @@
 <?php
-	
+
+
 	class Mod_comment extends CI_Model
 	{
 		function __construct()
@@ -10,52 +11,53 @@
 		}
 
 		
-
+	// 请注意:  0 是无法确定，1是褒义 ，2是贬义
+	// 
 		function Judg($praise,$unable,$criticize)
 		{
 			if($praise=='true')
 								{
-									if($unable=='true')
+									if($criticize=='true')
 									{
-										if($criticize=='true')
+										if($unable=='true')
 										{
 											$add = "comment.Judgment='0' or comment.Judgment='1' or comment.Judgment='2'";
 										}
 										else
-										{
-											$add = "comment.Judgment='0' or comment.Judgment='1'";	
+										{  // 贬义 褒义
+											$add = "comment.Judgment='2' or comment.Judgment='1'";	
 										}
 									}
 									else
 									{
-										if($criticize=='true')
-										{
-											$add = "comment.Judgment='1' or comment.Judgment='2'";
+										if($unable=='true')
+										{  // 褒义 无法确定
+											$add = "comment.Judgment='1' or comment.Judgment='0'";
 										}
 										else
-										{
+										{  //褒义
 											$add = "comment.Judgment='1'";
 										}
 									}
 								}
-								else
+		else
 								{
-									if($unable=='true')
+									if($criticize=='true')
 									{
-										if($criticize=='true')
-										{
+										if($unable=='true')
+										{   //贬义 无法确定
 											$add = "comment.Judgment='0' or comment.Judgment='2'";
 										}
 										else
-										{
+										{  // 贬义
 											$add = "comment.Judgment='2'";	
 										}
 									}
 									else
 									{
-										if($criticize=='true')
-										{
-											$add = "comment.Judgment='0' or comment.Judgment='2'";
+										if($unable=='true')
+										{   // 无法确定
+											$add = "comment.Judgment='0'";
 										}
 										else
 										{
@@ -185,6 +187,17 @@
 					//echo $que;	
 				}
 				$query = $this->db->query($que);
+			return $query;
+		}
+
+		function baobian($weiboid)
+		{
+			$que = "SELECT Judgment, COUNT( * ) AS coun 
+					FROM COMMENT 
+					WHERE  $weiboid = weiboid
+					GROUP BY Judgment
+					" ;
+			$query = $this->db->query($que);
 			return $query;
 		}
 }	
