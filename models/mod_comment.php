@@ -11,6 +11,28 @@
 		}
 
 		
+		function yuanweibo($weiboid)
+		{
+			$que = "
+					SELECT content
+					FROM  `weibo` 
+					WHERE id =  $weiboid
+					";
+			$query = $this->db->query($que);
+			return $query;
+		}
+
+		function yuancomment($weiboid)
+		{
+			$que = "
+					SELECT id,content
+					FROM  `comment` 
+					WHERE weiboid =  $weiboid
+					";
+			$query = $this->db->query($que);
+			return $query;
+		}
+
 	// 请注意:  0 是无法确定，1是褒义 ，2是贬义
 	// 
 		function Judg($praise,$unable,$criticize)
@@ -86,7 +108,7 @@
 			$add = $this->mod_comment->Judg($praise,$unable,$criticize);
 			if($limit=='null' && $offset=='null')
 			{			
-				$que = "SELECT id, $format
+				$que = "SELECT weiboid,id, $format
 					FROM (
 							SELECT * 
 							FROM COMMENT 
@@ -96,7 +118,7 @@
 			}
 			else
 			{
-				$que = "SELECT id, $format
+				$que = "SELECT weiboid,id, $format
 					FROM (
 							SELECT * 
 							FROM COMMENT 
@@ -117,7 +139,7 @@
 			$add = $this->mod_comment->Judg($praise,$unable,$criticize);
 			if($limit=='null' && $offset=='null')
 			{
-					$que = "SELECT id, $format
+					$que = "SELECT weiboid,id, $format
 						FROM (
 						SELECT * 
 						FROM COMMENT 
@@ -134,7 +156,7 @@
 			else
 			{
 
-					$que = "SELECT id, $format
+					$que = "SELECT weiboid,id, $format
 						FROM (
 						SELECT * 
 						FROM COMMENT 

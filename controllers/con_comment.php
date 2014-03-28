@@ -220,7 +220,7 @@ class Con_comment extends CI_Controller
 	                    'table_close'         => '</table>'
 		    				);
 		    $this->table->set_template($tmpl);
-			$this->table->set_heading('序号', '例句' );
+			$this->table->set_heading('序号', '例句','原语境' );
 
 			$num=($page-1)*$DropDownListPsize+1;
 			$data['num_begin'] = $num;
@@ -246,14 +246,18 @@ class Con_comment extends CI_Controller
 	            	
 	                $this->table->add_row(
 	                $num,
-	                stripslashes($newstr)
+	                stripslashes($newstr),
+	                anchor(site_url().'/con_comment/yuanyujing/'.$row['weiboid'].'/'.$row['id'],'原语境' )
+	                
 	                // 作品人暂无
 	                // ,
 	                // anchor("",'作品人')
 	                );
 	                $num++;
 	         	}
-
+   			$data['baoyi'] = "";
+			$data['bianyi'] = "";
+			$data['wufapanduan'] = "";
 
 			$data['base']=$this->config->item('base_url');
 			$data['css']=$this->config->item('css');
@@ -399,6 +403,99 @@ class Con_comment extends CI_Controller
 			$data['css']=$this->config->item('css');
 			$data['con_fun'] = "/con_comment/search_comment/";
 			$this->load->view('v_s_comment', $data);
+		}
+	}
+
+
+	function yuanyujing($weiboid,$commentid)
+	{
+		if(empty($_SESSION['lzduser'])|| empty($_SESSION['lzdusername']))
+		{
+			$template['base']=$this->config->item('base_url');
+			$template['css']=$this->config->item('css');
+			$template['con_fun'] = "/con_login/check/";	
+			$_SESSION['fail']='登陆后才可使用搜索功能！';
+			$this->load->view('login_fail_view',$template);
+		}
+		else
+		{
+			
+			$weibo = $this->mod_comment->yuanweibo($weiboid);
+		
+			$commentarr = $this->mod_comment->yuancomment($weiboid);
+		
+			$data['totalRows'] = $commentarr->num_rows();
+		
+			$this->load->library('table');
+		    
+		    $tmpl = array('table_open'          => '<table cellspacing="0" cellpadding="4" align="Center" border="0" id="SensGridView" style="color:#333333;width:904px;border-collapse:collapse;font-family: Calibri">',
+
+		    			'heading_row_start'   => '<tr style="color:White;background-color:#006699;font-size:10pt;font-weight:bold;">',
+	                    'heading_row_end'     => '</tr>',
+	                    'heading_cell_start'  => '<th align="left" scope="col" style="width:30px;">',
+	                    'heading_cell_end'    => '</th>',
+
+	                    'row_start'           => '<tr style="background-color:#EFF3FB;border-color:#EFF3FB;border-width:1px;border-style:None;font-size:10pt;">',
+	                    'row_end'             => '</tr>',
+	                    'cell_start'          => '<td align="left" >',
+	                    'cell_end'            => '</td>',
+
+	                    'row_alt_start'       => '<tr  style="background-color:White;font-size:10pt;">',
+	                    'row_alt_end'         => '</tr>',
+	                    'cell_alt_start'      => '<td align="left">',
+	                    'cell_alt_end'        => '</td>',
+
+	                    'table_close'         => '</table>'
+		    				);
+		    $this->table->set_template($tmpl);
+			
+		    // load the view
+			$this->table->set_heading('序号', '例句' );
+
+			$num =1;
+
+					
+					while($row = $weibo->_fetch_assoc())
+		            {
+		            	$this->table->add_row(
+			        	'<font color=blue>微博</font>',
+			        	'<font color=blue>'.$row['content'].'</font>'
+			        	);
+			       		
+		            }
+
+			       
+	         
+	        
+				    while($row2 = $commentarr->_fetch_assoc())
+		            {
+		            	if($row2['id'] != $commentid){
+		            		$this->table->add_row(
+					           $num,
+					           $row2['content']
+					           );
+		            		
+		            	}
+		            	else{
+				            $this->table->add_row(
+					           $num,
+					           '<font color=red id="jump">'.$row2['content'].'</font>'		         					                
+					           );  
+				          
+				        }  
+				        $num++;
+		            }
+		  
+
+
+			$data['baoyi'] = "0";
+			$data['bianyi'] = "0";
+			$data['wufapanduan'] = "0";
+			$data['base']=$this->config->item('base_url');
+			$data['css']=$this->config->item('css');
+			$data['con_fun'] = "/con_comment/search_comment/";
+			$this->load->view('v_s_yuanyujing', $data);
+			
 		}
 	}
 
