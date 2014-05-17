@@ -46,7 +46,16 @@
              
         </div>
     	<div id="divmiddle" style=" text-align :left; float :left; width :60%; height :auto; font-family:Verdana ; padding-left: 20px;">
-            <ul><li>欢迎<a href="<?php echo site_url(); ?>">联系我们</a></li></ul>     
+            <ul><li>欢迎查看功能说明,本网站实现的功能有：</li>  
+             
+            <li>微博话题检索</li>
+            <li>微博检索</li>
+            <li>微博评论检索</li>
+            <li>褒贬义判断</li>
+            <li>褒贬义评论数量统计</li>
+            <li>通过要查找的评论返回原语境</li>
+            <li>显示发微博者信息</li>
+            </ul>   
            
           
         </div>

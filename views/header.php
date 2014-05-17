@@ -47,7 +47,7 @@
                             }
                         ?>
                         &nbsp; |&nbsp;
-                        <a target="_top" href="<?php echo site_url()."/con_header/call_us/" ?>">联系我们</a>      
+                        <a target="_top" href="<?php echo site_url()."/con_header/call_us/" ?>">功能说明</a>      
                         <p><br><span style="color:navy"> 当前用户: [  ]</span>
                         <a target="_top" href="<?php echo site_url()."/con_login/exit_/" ?>">[退出]</a>                       
         </p></div>        

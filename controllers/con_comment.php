@@ -220,7 +220,7 @@ class Con_comment extends CI_Controller
 	                    'table_close'         => '</table>'
 		    				);
 		    $this->table->set_template($tmpl);
-			$this->table->set_heading('序号', '例句','原语境' );
+			$this->table->set_heading('序号', '例句','时间','原语境','作者' );
 
 			$num=($page-1)*$DropDownListPsize+1;
 			$data['num_begin'] = $num;
@@ -243,12 +243,21 @@ class Con_comment extends CI_Controller
 	            		}
 	            		
 	            	}
+
+	            	if($row['gender']=='m'){
+	            		$row['gender'] = '男';
+	            	}
+	            	else{
+	            		$row['gender'] = '女';
+	            	}
 	            	
 	                $this->table->add_row(
 	                $num,
 	                stripslashes($newstr),
-	                anchor(site_url().'/con_comment/yuanyujing/'.$row['weiboid'].'/'.$row['id'],'原语境' )
-	                
+	                $row['datetm'],
+	                anchor(site_url().'/con_comment/yuanyujing/'.$row['weiboid'].'/'.$row['id'],'原语境' ),
+	                $row['name'].' : '.$row['gender']
+	                //$row['name']+':'+$row['gender']
 	                // 作品人暂无
 	                // ,
 	                // anchor("",'作品人')
@@ -366,7 +375,7 @@ class Con_comment extends CI_Controller
 		    $this->table->set_template($tmpl);
 			
 		    // load the view
-			$this->table->set_heading('序号', '例句' );
+			$this->table->set_heading('序号', '例句','时间','作者' );
 
 			$num=($page-1)*$DropDownListPsize+1;
 			$data['num_begin'] = $num;
@@ -376,6 +385,13 @@ class Con_comment extends CI_Controller
 
 			while($row = $data['results']->_fetch_assoc())
 	            {
+	            	if($row['gender']=='m'){
+	            		$row['gender'] = '男';
+	            	}
+	            	else{
+	            		$row['gender'] = '女';
+	            	}
+
 	            	if($out_pattern == "RadioButton3") //分词标记
 	            	{
 	            		$newstr = $row['content'];	
@@ -386,7 +402,9 @@ class Con_comment extends CI_Controller
 	            	}
 	                $this->table->add_row(
 	                $num,
-	                stripslashes($newstr)
+	                stripslashes($newstr),
+	                $row['datetm'],
+	                $row['name'].' : '.$row['gender']
 	                // 作品人暂无
 	                // ,
 	                // anchor(site_url().'/con_comment/creator_Information/'.$row['userid'],'作品人')
@@ -450,7 +468,7 @@ class Con_comment extends CI_Controller
 		    $this->table->set_template($tmpl);
 			
 		    // load the view
-			$this->table->set_heading('序号', '例句' );
+			$this->table->set_heading('序号', '例句','时间','作者' );
 
 			$num =1;
 
@@ -459,7 +477,8 @@ class Con_comment extends CI_Controller
 		            {
 		            	$this->table->add_row(
 			        	'<font color=blue>微博</font>',
-			        	'<font color=blue>'.$row['content'].'</font>'
+			        	'<font color=blue>'.$row['content'].'</font>',
+			        	'<font color=blue>'.$row['createdate'].'</font>'
 			        	);
 			       		
 		            }
@@ -469,10 +488,19 @@ class Con_comment extends CI_Controller
 	        
 				    while($row2 = $commentarr->_fetch_assoc())
 		            {
+		            	if($row2['gender']=='m'){
+	            			$row2['gender'] = '男';
+	            		}
+	            		else{
+	            			$row2['gender'] = '女';
+	            		}
+
 		            	if($row2['id'] != $commentid){
 		            		$this->table->add_row(
 					           $num,
-					           $row2['content']
+					           $row2['content'],
+					           $row2['datetm'],
+					           $row2['name'].' : '.$row2['gender']
 					           );
 		            		
 		            	}

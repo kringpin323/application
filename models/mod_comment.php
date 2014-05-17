@@ -14,7 +14,7 @@
 		function yuanweibo($weiboid)
 		{
 			$que = "
-					SELECT content
+					SELECT content,createdate
 					FROM  `weibo` 
 					WHERE id =  $weiboid
 					";
@@ -25,9 +25,10 @@
 		function yuancomment($weiboid)
 		{
 			$que = "
-					SELECT id,content
-					FROM  `comment` 
+					SELECT comment.id,content,datetm,name,gender
+					FROM  `comment`,user
 					WHERE weiboid =  $weiboid
+					and comment.userid = user.id
 					";
 			$query = $this->db->query($que);
 			return $query;
@@ -108,23 +109,25 @@
 			$add = $this->mod_comment->Judg($praise,$unable,$criticize);
 			if($limit=='null' && $offset=='null')
 			{			
-				$que = "SELECT weiboid,id, $format
+				$que = "SELECT weiboid,temp.id,datetm, $format,name,gender
 					FROM (
 							SELECT * 
 							FROM COMMENT 
 							WHERE $add
-							) AS temp
-				WHERE temp.content LIKE  '%$word%'";
+							) AS temp, user
+				WHERE temp.content LIKE  '%$word%'
+				and user.id = temp.userid";
 			}
 			else
 			{
-				$que = "SELECT weiboid,id, $format
+				$que = "SELECT weiboid,temp.id,datetm, $format,name,gender
 					FROM (
 							SELECT * 
 							FROM COMMENT 
 							WHERE $add
-							) AS temp
+							) AS temp, user
 				WHERE temp.content LIKE  '%$word%'
+				and user.id = temp.userid
 				LIMIT $offset , $limit";
 				;
 				
@@ -139,36 +142,42 @@
 			$add = $this->mod_comment->Judg($praise,$unable,$criticize);
 			if($limit=='null' && $offset=='null')
 			{
-					$que = "SELECT weiboid,id, $format
+					$que = "SELECT weiboid,temp.id,datetm, $format,name,gender
 						FROM (
 						SELECT * 
-						FROM COMMENT 
+						FROM COMMENT
 						WHERE $add
-						) AS temp
-						WHERE id
-						IN (
-						SELECT comandword.cid
-						FROM word, comandword
-						WHERE word.word =  '$word'
-						AND word.id = comandword.wid
-						)";
-			}
-			else
-			{
-
-					$que = "SELECT weiboid,id, $format
-						FROM (
-						SELECT * 
-						FROM COMMENT 
-						WHERE $add
-						) AS temp
-						WHERE id
+						) AS temp , user
+						WHERE temp.id
 						IN (
 						SELECT comandword.cid
 						FROM word, comandword
 						WHERE word.word =  '$word'
 						AND word.id = comandword.wid
 						)
+						and user.id = temp.userid
+						
+
+						";
+			}
+			else
+			{
+
+					$que = "SELECT weiboid,temp.id,datetm, $format,name,gender
+						FROM (
+						SELECT * 
+						FROM COMMENT
+						WHERE $add
+						) AS temp , user
+						WHERE temp.id
+						IN (
+						SELECT comandword.cid
+						FROM word, comandword
+						WHERE word.word =  '$word'
+						AND word.id = comandword.wid
+						)
+						and user.id = temp.userid
+						
 						limit $offset,$limit";
 					
 			}
@@ -188,23 +197,25 @@
 				$add = $this->mod_comment->Judg($praise,$unable,$criticize);
 				if($limit=='null' && $offset=='null')
 				{
-					$que = "select id,$format
+					$que = "select temp.id,datetm,$format,name,gender
 						from  (
 						SELECT * 
 						FROM COMMENT 
 						WHERE $add
-						) AS temp
-						where temp.weiboid = $weiboid";
+						) AS temp,user
+						where temp.weiboid = $weiboid
+						and temp.userid = user.id";
 				}
 				else
 				{
-					$que = "select id,$format
+					$que = "select temp.id,datetm,$format,name,gender
 						from  (
 						SELECT * 
 						FROM COMMENT 
 						WHERE $add
-						) AS temp
+						) AS temp,user
 						where temp.weiboid = $weiboid
+						and temp.userid = user.id
 						limit $offset , $limit";
 					//echo $que;	
 				}

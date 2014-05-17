@@ -19,8 +19,10 @@ class Mod_login extends CI_Model {
 		  else 
 		  {
 		  	//将用户输入密码加密后与数据库中存储密码配对
-				$key = $this->config->item('encryption_key');  	 
-			  $sql="SELECT uid,uname from useman where uname = '$vname' and encryptedpassword = AES_ENCRYPT('$vpasswd','$key')";
+				// $key = $this->config->item('encryption_key');  	 
+			  // $sql="SELECT uid,uname from useman where uname = '$vname' and encryptedpassword = AES_ENCRYPT('$vpasswd','Jb83MUhY01')";
+				$sql="SELECT uid,uname from useman where uname = '$vname' and encryptedpassword = '$vpasswd'";
+			    
 		  		 $query=$this->db->query($sql);
 				 if($query->num_rows()==0)
 				 {
